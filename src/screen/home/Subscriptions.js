@@ -37,15 +37,16 @@ export default class Subscriptions extends Component {
       loading: false,
       selectedPlan: '1',
       url: '',
-      isFromAccount: false
+      isFromAccount: false,
+      flag: 0
     }
   }
 
 
   componentDidMount() {
-
+    const { flag } = this.props.route.params
     const { isFromAccount } = this.props.route.params
-    this.setState({ isFromAccount: isFromAccount })
+    this.setState({ isFromAccount: isFromAccount, flag: flag })
 
   }
 
@@ -56,7 +57,7 @@ export default class Subscriptions extends Component {
       this.setState({ loading: true })
       const resp = await getRequestApi(current_subscription, body, token)
       if (resp) {
-        console.warn(resp);
+        console.warn("free trial Data", resp.responseJson.data);
         this.setState({ loading: false, mySubscriptionData: resp.responseJson.data })
       }
     } catch (error) {
@@ -102,7 +103,11 @@ export default class Subscriptions extends Component {
       if (responseJson.status) {
 
         this.props.navigation.dispatch(
-          StackActions.replace('PaymentWebView', { paymentUrl: responseJson.data.approval_url, endPoint: executeSubscriptionPayment })
+          StackActions.replace('PaymentWebView',
+            {
+              paymentUrl: responseJson.data.approval_url, endPoint: executeSubscriptionPayment,
+              plainId: this.state.selectedPlan
+            })
         );
 
         // this.props.navigation.navigate('PaymentWebView',{paymentUrl:responseJson.data.approval_url,endPoint:executeSubscriptionPayment})
@@ -117,7 +122,7 @@ export default class Subscriptions extends Component {
   renderItems(data) {
     // console.warn("mySubscriptionData",this.state.mySubscriptionData);
     const { item, index } = data
-    const { plan_id, plan_name, plan_amount, plan_type, status, fetaures_list,expiry_date } = item
+    const { plan_id, plan_name, plan_amount, plan_type, status, fetaures_list, expiry_date } = item
     // const money =plan_amount==0?0:plan_amount.split(".")
     // const rupees = money[0]
     // const paisa = money[1]
@@ -147,37 +152,37 @@ export default class Subscriptions extends Component {
           alignItems: "flex-end",
         }}>
           {
-            plan_amount==0
-            ?
-            null
-            :
-            <>
-            <Text style={{ color: '#000', fontWeight: "bold", fontSize: 25 }}>$ </Text>
-            <Text
-              style={{
-                color: '#000',
-                fontSize: 40,
-                fontWeight: "bold",
-              }}>
-              {plan_amount}
-            </Text>
-            </>
+            plan_amount == 0
+              ?
+              null
+              :
+              <>
+                <Text style={{ color: '#000', fontWeight: "bold", fontSize: 25 }}>$ </Text>
+                <Text
+                  style={{
+                    color: '#000',
+                    fontSize: 40,
+                    fontWeight: "bold",
+                  }}>
+                  {plan_amount}
+                </Text>
+              </>
           }
-        
+
         </View>
-        <Text style={{ color: '#a6a5a5', textAlign: "center", fontWeight: "bold", padding:expiry_date?5: 16 }}>
+        <Text style={{ color: '#a6a5a5', textAlign: "center", fontWeight: "bold", padding: expiry_date ? 5 : 16 }}>
           {plan_type}
         </Text>
         {
           expiry_date
-          ?
-          <Text style={{ color: '#a6a5a5', textAlign: "center", fontWeight: "bold",padding:5 }}>
-         Expiry Date : {expiry_date}
-        </Text>
-          :
-          null
+            ?
+            <Text style={{ color: '#a6a5a5', textAlign: "center", fontWeight: "bold", padding: 5 }}>
+              Expiry Date : {expiry_date}
+            </Text>
+            :
+            null
         }
-      
+
         <View style={{}}>
           {
             fetaures_list
@@ -210,8 +215,6 @@ export default class Subscriptions extends Component {
 
   render() {
     const { isFromAccount } = this.state
-
-
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -278,24 +281,31 @@ export default class Subscriptions extends Component {
 
             {
               this.state.selectedTab == 0 ?
+                <>
+                  {
+                    this.state.flag == 1
+                      ?
 
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('TabBar')}
-                  style={{
-                    paddingVertical: hp(2),
-                    borderColor: colors.themeColor,
-                    borderRadius: 50,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginHorizontal: wp(15),
-                    marginVertical: hp(1),
-                    borderWidth: 1,
-                  }}>
-                  <Text style={{ fontSize: 17, color: colors.themeColor, fontWeight: 'bold' }}>
-                    Free Subscription
-                  </Text>
-                </TouchableOpacity>
-
+                      <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('TabBar')}
+                        style={{
+                          paddingVertical: hp(2),
+                          borderColor: colors.themeColor,
+                          borderRadius: 50,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginHorizontal: wp(15),
+                          marginVertical: hp(1),
+                          borderWidth: 1,
+                        }}>
+                        <Text style={{ fontSize: 17, color: colors.themeColor, fontWeight: 'bold' }}>
+                          Free Subscription
+                        </Text>
+                      </TouchableOpacity>
+                      :
+                      null
+                  }
+                </>
                 :
                 null
             }

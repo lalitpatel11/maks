@@ -85,7 +85,7 @@ export default class WelcomeFourth extends Component {
     <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18}}>•</Text>
 </View>
 <View style={{flex:15}}>
-    <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18,textAlign:'justify'}}>Manage your income and expenses</Text>
+    <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18}}>Manage your income and expenses</Text>
 </View>
 </View>
 <View style={{flexDirection:'row'}}>
@@ -93,7 +93,7 @@ export default class WelcomeFourth extends Component {
     <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18}}>•</Text>
 </View>
 <View style={{flex:15}}>
-    <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18,textAlign:'justify'}}>Manage your work-from-home deductions</Text>
+    <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18}}>Manage your work-from-home deductions</Text>
 </View>
 </View>
 <View style={{flexDirection:'row'}}>
@@ -101,7 +101,7 @@ export default class WelcomeFourth extends Component {
     <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18}}>•</Text>
 </View>
 <View style={{flex:15}}>
-    <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18,textAlign:'justify'}}>Manage your mileage log</Text>
+    <Text style={{fontFamily:'NunitoSans-SemiBold',fontSize:18}}>Manage your mileage log</Text>
 </View>
 </View>
 <View style={{flexDirection:'row'}}>

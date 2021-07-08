@@ -118,7 +118,7 @@ if(global.showAfterLive == '2')
     responseJson.message,
     [
 
-      { text: "OK", onPress: () => this.props.navigation.navigate('Subscriptions',{isFromAccount:false}) }
+      { text: "OK", onPress: () => this.props.navigation.navigate('Subscriptions',{isFromAccount:false,flag:1}) }
     ],
     { cancelable: false }
   );

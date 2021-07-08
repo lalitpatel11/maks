@@ -83,9 +83,36 @@ export default class TabBar extends Component {
         const remainingDay=resp.responseJson.remaining_day
         if (remainingDay<=5) {
           if (remainingDay==0) {
-            Alert.alert("Subscription Alert","Your free subscription plan expired")
+            Alert.alert(
+              "Subscription Alert",
+              "Your free subscription plan expired",
+              [
+                {
+                  text: 'Buy now',
+                  onPress: () => this.props.navigation.navigate('Subscriptions',{isFromAccount:true}),
+                  style: 'cancel'
+                },
+                {
+                  text: 'cancel',
+                  onPress: () =>console.log('cancled')
+                }
+              ],
+              )
           } else {
-            Alert.alert("Subscription Alert",`${remainingDay} days is left of your free subscription`)
+            Alert.alert(
+              "Subscription Alert",
+            `${remainingDay} days is left of your free subscription`,
+            [
+              {
+                text: 'Buy now',
+                onPress: () => this.props.navigation.navigate('Subscriptions',{isFromAccount:true}),
+                style: 'cancel'
+              },
+              {
+                text: 'cancel',
+                onPress: () => console.log('cancled')
+              }
+            ],)
           }
         }
       }
