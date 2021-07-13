@@ -118,15 +118,13 @@ if(global.showAfterLive == '2')
     responseJson.message,
     [
 
-      { text: "OK", onPress: () => this.props.navigation.navigate('Subscriptions',{isFromAccount:false,flag:1}) }
+      { text: "OK", onPress: () => this.props.navigation.replace('Subscriptions',{isFromAccount:false,flag:1}) }
     ],
     { cancelable: false }
   );
   
 }else{
-
-  this.props.navigation.navigate('TabBar')
-
+  this.props.navigation.replace('TabBar')
 }
 
 }else{

@@ -35,14 +35,14 @@ export default class Subscriptions extends Component {
       mySubscriptionData: [],
       data: [],
       loading: false,
-      selectedPlan: '1',
+      plan_name: "",
+      plan_price: "",
+      selectedPlan: 1,
       url: '',
       isFromAccount: false,
       flag: 0
     }
   }
-
-
   componentDidMount() {
     const { flag } = this.props.route.params
     const { isFromAccount } = this.props.route.params
@@ -57,7 +57,6 @@ export default class Subscriptions extends Component {
       this.setState({ loading: true })
       const resp = await getRequestApi(current_subscription, body, token)
       if (resp) {
-        console.warn("free trial Data", resp.responseJson.data);
         this.setState({ loading: false, mySubscriptionData: resp.responseJson.data })
       }
     } catch (error) {
@@ -78,6 +77,7 @@ export default class Subscriptions extends Component {
           arr.push(item)
         }
       })
+      console.warn(arr);
       this.setState({ loading: false, data: arr })
     }
   }
@@ -106,7 +106,8 @@ export default class Subscriptions extends Component {
           StackActions.replace('PaymentWebView',
             {
               paymentUrl: responseJson.data.approval_url, endPoint: executeSubscriptionPayment,
-              plainId: this.state.selectedPlan
+              plan_name: this.state.plan_name,
+              plan_price: this.state.plan_price
             })
         );
 
@@ -116,8 +117,8 @@ export default class Subscriptions extends Component {
     } else {
       Alert.alert('Please select your plan.')
     }
-
   }
+
 
   renderItems(data) {
     // console.warn("mySubscriptionData",this.state.mySubscriptionData);
@@ -128,7 +129,11 @@ export default class Subscriptions extends Component {
     // const paisa = money[1]
     const { isFromAccount } = this.state
     return (
-      <TouchableOpacity onPress={() => this.setState({ selectedPlan: plan_id })} key={index}
+      <TouchableOpacity onPress={() => this.setState({
+        selectedPlan: plan_id,
+        plan_name: plan_name,
+        plan_price: plan_amount
+      })} key={index}
         style={{
           flex: 1, marginTop: 15, marginHorizontal: 10,
           backgroundColor: this.state.selectedPlan === plan_id ? '#e9fefe' : "#FFFFFF",
@@ -208,8 +213,8 @@ export default class Subscriptions extends Component {
         </View>
       </TouchableOpacity>
     )
-  }
 
+  }
 
 
 
@@ -244,61 +249,75 @@ export default class Subscriptions extends Component {
 
           </TouchableOpacity>
 
+          {
+            this.state.flag == 1
+              ?
+              null
+              :
+              <TouchableOpacity onPress={() => {
+                this.setState({ selectedTab: 1 })
+              }} style={{
+                borderWidth: 2, borderColor: this.state.selectedTab == 1 ? colors.themeColor : "#fff", paddingVertical: 10,
+                width: "45%", alignItems: "center", justifyContent: "center",
+                borderRadius: 30, paddingHorizontal: 10, elevation: this.state.selectedTab === 1 ? 1 : 0,
+                backgroundColor: this.state.selectedTab == 1 ? colors.themeColor : "#fff"
+              }}>
 
-          <TouchableOpacity onPress={() => {
-            this.setState({ selectedTab: 1 })
-          }} style={{
-            borderWidth: 2, borderColor: this.state.selectedTab == 1 ? colors.themeColor : "#fff", paddingVertical: 10,
-            width: "45%", alignItems: "center", justifyContent: "center",
-            borderRadius: 30, paddingHorizontal: 10, elevation: this.state.selectedTab === 1 ? 1 : 0,
-            backgroundColor: this.state.selectedTab == 1 ? colors.themeColor : "#fff"
-          }}>
+                <Text style={{
+                  fontSize: 14, color: this.state.selectedTab == 1 ? "#FFF" : colors.themeColor,
+                  textAlign: "center",
+                  letterSpacing: 0
+                }}>My Subscription</Text>
 
-            <Text style={{
-              fontSize: 14, color: this.state.selectedTab == 1 ? "#FFF" : colors.themeColor,
-              textAlign: "center",
-              letterSpacing: 0
-            }}>My Subscription</Text>
-
-          </TouchableOpacity>
+              </TouchableOpacity>
+          }
         </View>
         <ScrollView showsVerticalScrollIndicator={false} >
-
-
           <View
             style={{
               backgroundColor: '#fff',
               borderRadius: 15,
               marginBottom: hp(2)
             }}>
-
-
             <FlatList
               data={this.state.selectedTab == 0 ? this.state.data : this.state.mySubscriptionData}
               renderItem={(item) => this.renderItems(item)}
               keyExtractor={(item, index) => index.toString()}
             />
-
             {
               this.state.selectedTab == 0 ?
                 <>
                   {
                     this.state.flag == 1
                       ?
-
                       <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('TabBar')}
                         style={{
-                          paddingVertical: hp(2),
                           borderColor: colors.themeColor,
-                          borderRadius: 50,
-                          justifyContent: 'center',
+                          borderRadius: 20,
+                          padding: 5,
                           alignItems: 'center',
-                          marginHorizontal: wp(15),
-                          marginVertical: hp(1),
+                          marginVertical: hp(3),
+                          marginHorizontal: hp(2),
                           borderWidth: 1,
                         }}>
-                        <Text style={{ fontSize: 17, color: colors.themeColor, fontWeight: 'bold' }}>
+                        <View
+                          style={{
+                            backgroundColor: colors.themeColor,
+                            borderRadius: 50,
+                            paddingHorizontal: 70,
+                            padding: 5,
+                          }}
+                        >
+                          <Text style={{
+                            fontSize: 20, color: '#fff',
+                            borderRadius: 20,
+                            textAlign: "center"
+                          }}>
+                            Free Trial
+                          </Text>
+                        </View>
+                        <Text style={{ color: '#a6a5a5', textAlign: "center", marginVertical: 10, fontWeight: "bold", }}>
                           Free Subscription
                         </Text>
                       </TouchableOpacity>
@@ -310,7 +329,6 @@ export default class Subscriptions extends Component {
                 null
             }
           </View>
-
         </ScrollView>
         {
           this.state.selectedTab == 0
@@ -324,7 +342,6 @@ export default class Subscriptions extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 margin: 30
-
               }}>
               <Text style={{ fontSize: 17, color: '#fff', fontWeight: 'bold' }}>
                 Subscribe Now
