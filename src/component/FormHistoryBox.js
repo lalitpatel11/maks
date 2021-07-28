@@ -44,7 +44,7 @@ export default class FormHistoryBox extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginVertical:10}}>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginVertical:10}}>
                         <TouchableOpacity onPress={() => this.openUrl(item.annual_preview  )} style={{ width: wp(40), borderWidth: 1, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: hp(2), borderRadius: 50, paddingHorizontal: hp(2), alignItems: 'center', borderColor: '#8F8F8F' }}>
                             <Text style={{ fontSize: 15, color: '#8F8F8F' }}>Annual View</Text>
                             <Image
@@ -52,7 +52,7 @@ export default class FormHistoryBox extends Component {
                                 style={{ tintColor: colors.themeColor, height: 20, width: 20, resizeMode: 'contain' }}
                             />
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
 
                     {/* <View style={{flexDirection:'row',alignSelf:'center',justifyContent:'space-between'}}>
 <TouchableOpacity onPress={()=>this.props.viewClick(item)} 

@@ -55,8 +55,7 @@ export default class Home extends Component {
   };
 
   render() {
-
-    console.warn("formHistoryArr",this.state.formHistoryArr);
+    console.warn(`https://admin.makstaxapp.com/api/home-business-form/${this.state.web_id}`);
     return (
       <View style={{ flex: 1, }}>
         <Header navigation={this.props.navigation}

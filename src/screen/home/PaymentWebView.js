@@ -58,6 +58,7 @@ export default class PaymentWebView extends React.Component {
   }
 
   render() {
+    console.warn(this.state.redirectUrl);
     const { navigate } = this.props.navigation;
     const { goBack } = this.props.navigation;
     return (
