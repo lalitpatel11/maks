@@ -77,8 +77,9 @@ export default class Subscriptions extends Component {
           arr.push(item)
         }
       })
-      console.warn(arr);
-      this.setState({ loading: false, data: arr })
+      let filArr=arr.filter(e=>e.plan_amount!=0)
+      console.warn("filter Array",filArr);
+      this.setState({ loading: false, data:this.state.flag == 1?arr:filArr })
     }
   }
   async componentWillMount() {
@@ -93,29 +94,31 @@ export default class Subscriptions extends Component {
     });
   }
   async buySubscription() {
-    if (this.state.selectedPlan) {
-      this.setState({ loading: true })
-      const formData = new FormData()
-      formData.append('plan_id', this.state.selectedPlan)
-      const token = this.state.token
-      const { responseJson, err } = await postRequestMediaApi(buy_subscription, formData, token)
-      this.setState({ loading: false })
-      if (responseJson.status) {
-
-        this.props.navigation.dispatch(
-          StackActions.replace('PaymentWebView',
-            {
-              paymentUrl: responseJson.data.approval_url, endPoint: executeSubscriptionPayment,
-              plan_name: this.state.plan_name,
-              plan_price: this.state.plan_price
-            })
-        );
-
-        // this.props.navigation.navigate('PaymentWebView',{paymentUrl:responseJson.data.approval_url,endPoint:executeSubscriptionPayment})
+    if (this.state.plan_price!=0) {
+      if (this.state.selectedPlan) {
+        this.setState({ loading: true })
+        const formData = new FormData()
+        formData.append('plan_id', this.state.selectedPlan)
+        const token = this.state.token
+        const { responseJson, err } = await postRequestMediaApi(buy_subscription, formData, token)
+        this.setState({ loading: false })
+        if (responseJson.status) {
+          this.props.navigation.dispatch(
+            StackActions.replace('PaymentWebView',
+              {
+                paymentUrl: responseJson.data.approval_url, endPoint: executeSubscriptionPayment,
+                plan_name: this.state.plan_name,
+                plan_price: this.state.plan_price
+              })
+          );
+          // this.props.navigation.navigate('PaymentWebView',{paymentUrl:responseJson.data.approval_url,endPoint:executeSubscriptionPayment})
+        }
+      } else {
+        Alert.alert('Please select your plan.')
       }
-
-    } else {
-      Alert.alert('Please select your plan.')
+    }else{
+      this.props.navigation.navigate('TabBar')
+      console.warn(this.state.flag)
     }
   }
 
@@ -268,7 +271,6 @@ export default class Subscriptions extends Component {
                   textAlign: "center",
                   letterSpacing: 0
                 }}>My Subscription</Text>
-
               </TouchableOpacity>
           }
         </View>
@@ -284,50 +286,6 @@ export default class Subscriptions extends Component {
               renderItem={(item) => this.renderItems(item)}
               keyExtractor={(item, index) => index.toString()}
             />
-            {
-              this.state.selectedTab == 0 ?
-                <>
-                  {
-                    this.state.flag == 1
-                      ?
-                      <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('TabBar')}
-                        style={{
-                          borderColor: colors.themeColor,
-                          borderRadius: 20,
-                          padding: 5,
-                          alignItems: 'center',
-                          marginVertical: hp(3),
-                          marginHorizontal: hp(2),
-                          borderWidth: 1,
-                        }}>
-                        <View
-                          style={{
-                            backgroundColor: colors.themeColor,
-                            borderRadius: 50,
-                            paddingHorizontal: 70,
-                            padding: 5,
-                          }}
-                        >
-                          <Text style={{
-                            fontSize: 20, color: '#fff',
-                            borderRadius: 20,
-                            textAlign: "center"
-                          }}>
-                            Free Trial
-                          </Text>
-                        </View>
-                        <Text style={{ color: '#a6a5a5', textAlign: "center", marginVertical: 10, fontWeight: "bold", }}>
-                          Free Subscription
-                        </Text>
-                      </TouchableOpacity>
-                      :
-                      null
-                  }
-                </>
-                :
-                null
-            }
           </View>
         </ScrollView>
         {
