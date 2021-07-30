@@ -11,8 +11,6 @@ export default class MyAccount extends Component {
     constructor() {
         super()
         this.state = {
-
-
             title: '',
             note: '',
             attachment: '',
@@ -95,7 +93,7 @@ export default class MyAccount extends Component {
                             <TouchableOptions
                                 iconName="credit"
                                 title="Subscriptions"
-                                onClick={() => this.props.navigation.navigate('Subscriptions', { isFromAccount: true })}
+                                onClick={() => this.props.navigation.navigate('Subscriptions', { isFromAccount: true,flag:0 })}
                             />
                             : null
 

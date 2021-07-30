@@ -49,6 +49,9 @@ export default class Subscriptions extends Component {
     this.setState({ isFromAccount: isFromAccount, flag: flag })
 
   }
+  componentwillunmount(){
+    this.setState({flag: 0 })
+  }
 
   async mySubscriptionList() {
     const body = ''
@@ -117,8 +120,7 @@ export default class Subscriptions extends Component {
         Alert.alert('Please select your plan.')
       }
     }else{
-      this.props.navigation.navigate('TabBar')
-      console.warn(this.state.flag)
+      this.props.navigation.replace('TabBar')
     }
   }
 
@@ -222,6 +224,7 @@ export default class Subscriptions extends Component {
 
 
   render() {
+    console.warn(this.state.flag)
     const { isFromAccount } = this.state
     return (
       <View style={{ flex: 1 }}>
